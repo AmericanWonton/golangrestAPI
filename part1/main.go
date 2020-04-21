@@ -22,11 +22,6 @@ type Articles []Article
 var myStoredArticles Articles //A stored collection of all our articles
 
 func allArticles(w http.ResponseWriter, r *http.Request) {
-	myStoredArticles = append(myStoredArticles, Article{Id: "1", Title: "Test Title", Desc: "Test Description", Content: "Hello World"},
-		Article{Id: "2", Title: "Hello 2", Desc: "Article Description", Content: "Article Content"})
-
-	testArticle := Article{Id: "3", Title: "Fun Times", Desc: "Test Fun!", Content: "Shutup world"}
-	myStoredArticles = append(myStoredArticles, testArticle)
 
 	fmt.Println("Endpoint Hit: All Articles Endpoint. This is what you get with GET")
 	json.NewEncoder(w).Encode(myStoredArticles)
@@ -78,6 +73,7 @@ func deleteArticle(w http.ResponseWriter, r *http.Request) {
 		if article.Id == id {
 			// updates our Articles array to remove the
 			// article
+			fmt.Printf("We're gunna delete this ID: %v\n", id)
 			myStoredArticles = append(myStoredArticles[:index], myStoredArticles[index+1:]...)
 		}
 	}
@@ -125,7 +121,15 @@ func sayHi(w http.ResponseWriter, r *http.Request) {
 }
 
 func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Homepage Endpoint Hit")
+	fmt.Println("Welcome to the home endpoint! We're just gunna load some test data rn...")
+	//Load Test data
+	myStoredArticles = append(myStoredArticles, Article{Id: "1", Title: "Test Title", Desc: "Test Description", Content: "Hello World"},
+		Article{Id: "2", Title: "Hello 2", Desc: "Article Description", Content: "Article Content"})
+
+	testArticle := Article{Id: "3", Title: "Fun Times", Desc: "Test Fun!", Content: "Shutup world"}
+	myStoredArticles = append(myStoredArticles, testArticle)
+
+	fmt.Fprintf(w, "Homepage Endpoint Hit\nHere's your test data:\n%v", myStoredArticles)
 }
 
 func handleRequests() {
