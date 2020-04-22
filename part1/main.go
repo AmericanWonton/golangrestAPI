@@ -84,17 +84,19 @@ func updateArticle(w http.ResponseWriter, r *http.Request) {
 	reqBody, _ := ioutil.ReadAll(r.Body)
 	fmt.Printf("Here's our body: \n%v\n", reqBody)
 	var updatedArticle Article
+	json.Unmarshal(reqBody, &updatedArticle)
+	fmt.Printf("Here is our updatedArticle: %v\n", updatedArticle)
 	// once again, we will need to parse the path parameters
-	vars := mux.Vars(r)
+	//vars := mux.Vars(r)
 	// we will need to extract the `id` of the article we
 	// wish to delete
-	id := vars["id"]
+	//id := vars["id"]
 
 	// we then need to loop through all our articles
 	for index, article := range myStoredArticles {
 		// if our id path parameter matches one of our
 		// articles
-		if article.Id == id {
+		if article.Id == updatedArticle.Id {
 			// updates our Articles array to update the
 			// article
 			/*
@@ -139,7 +141,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/", homePage)
 	myRouter.HandleFunc("/articles", allArticles).Methods("GET")
 	myRouter.HandleFunc("/articles", testPostArticles).Methods("POST")
-	myRouter.HandleFunc("/sayhi", sayHi).Methods("POST")
+	myRouter.HandleFunc("/sayhi", sayHi).Methods("POST") //This is mostly just debug
 	myRouter.HandleFunc("/postArticle", updateArticle).Methods("POST")
 	myRouter.HandleFunc("/article", createNewArticle).Methods("POST") //This has to be defined before the below!
 	myRouter.HandleFunc("/article/{id}", deleteArticle).Methods("DELETE")
